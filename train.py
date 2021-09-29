@@ -55,6 +55,9 @@ LOCAL_RANK = int(os.getenv('LOCAL_RANK', -1))  # https://pytorch.org/docs/stable
 RANK = int(os.getenv('RANK', -1))
 WORLD_SIZE = int(os.getenv('WORLD_SIZE', 1))
 
+print('--- *** ---')
+print(f'RANK: {RANK}, WORLD_SIZE: {WORLD_SIZE}')
+print('--- *** ---')
 
 def train(hyp,  # path/to/hyp.yaml or hyp dictionary
           opt,
@@ -319,6 +322,11 @@ def train(hyp,  # path/to/hyp.yaml or hyp dictionary
                 if opt.quad:
                     loss *= 4.
 
+                print('--- *** ---')
+                print(f'loss: {loss}')
+                print(f'loss items: {loss_items}')
+                print('--- *** ---')
+
             # Backward
             scaler.scale(loss).backward()
 
@@ -334,6 +342,9 @@ def train(hyp,  # path/to/hyp.yaml or hyp dictionary
             # Log
             if RANK in [-1, 0]:
                 mloss = (mloss * i + loss_items) / (i + 1)  # update mean losses
+                print('--- *** ---')
+                print(f'mean loss: {mloss}')
+                print('--- *** ---')
                 mem = f'{torch.cuda.memory_reserved() / 1E9 if torch.cuda.is_available() else 0:.3g}G'  # (GB)
                 pbar.set_description(('%10s' * 2 + '%10.4g' * 5) % (
                     f'{epoch}/{epochs - 1}', mem, *mloss, targets.shape[0], imgs.shape[-1]))
