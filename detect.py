@@ -163,7 +163,8 @@ def run(
                 # Write results
                 for *xyxy, conf, cls in reversed(det):
                     if save_txt:  # Write to file
-                        xywh = (xyxy2xywh(torch.tensor(xyxy).view(1, 4)) / gn).view(-1).tolist()  # normalized xywh
+                        #xywh = (xyxy2xywh(torch.tensor(xyxy).view(1, 4)) / gn).view(-1).tolist()  # normalized xywh
+                        xywh = (xyxy2xywh(torch.tensor(xyxy).view(1, 4))).view(-1).tolist()  # absolute xywh
                         #line = (cls, *xywh, conf) if save_conf else (cls, *xywh)  # label format
                         diagonal = np.sqrt(xywh[2] * xywh[2] + xywh[3] * xywh[3])
                         line = (*xywh, diagonal, conf) if save_conf else (*xywh, diagonal)  # label format
